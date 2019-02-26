@@ -75,7 +75,7 @@ public class Deque<Item> implements Iterable<Item> {
 			Item item = last.item;
 			Node oldLast = last;
 			last = last.previous;
-			oldLast = null;
+			last.next = null;
 			return item;
 		} else {
 			throw new NoSuchElementException();
