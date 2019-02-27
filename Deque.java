@@ -20,7 +20,7 @@ public class Deque<Item> implements Iterable<Item> {
 	}
 	
 	public boolean isEmpty() {
-		return first == null;
+		return size == 0;
 	}
 	
 	public void addFirst(Item item) {
@@ -28,7 +28,7 @@ public class Deque<Item> implements Iterable<Item> {
 		first = new Node();
 		first.item = item;
 		first.next = oldFirst;
-		if(oldFirst == null) {
+		if(size == 0) {
 			last = first;
 		}
 		size++;
@@ -60,10 +60,16 @@ public class Deque<Item> implements Iterable<Item> {
 	}
 	
 	public Item removeFirst() {
-		if(first != null) {
+		if(size > 0) {
 			Item item = first.item;
 			first = first.next;
+
+			size--;
 			
+			if(size == 0) {
+				first = null;
+				last = null;
+			}
 			return item;
 		} else {
 			throw new NoSuchElementException();
@@ -75,7 +81,16 @@ public class Deque<Item> implements Iterable<Item> {
 			Item item = last.item;
 			Node oldLast = last;
 			last = last.previous;
-			last.next = null;
+			if(last != null) {
+				last.next = null;
+			}
+			
+			size--;
+			
+			if(size == 0) {
+				first = null;
+				last = null;
+			}
 			return item;
 		} else {
 			throw new NoSuchElementException();
@@ -100,6 +115,10 @@ public class Deque<Item> implements Iterable<Item> {
 		public boolean hasNext() {
 			return current.next != null;
 		}
+		
+		public void remove() {
+			throw new UnsupportedOperationException();
+		}
 	}
 	
 	public static void main(String[] args) {
@@ -108,9 +127,12 @@ public class Deque<Item> implements Iterable<Item> {
 		deque.addFirst("Bohdan");
 		deque.addFirst("Siavolt");
 		deque.addLast("Aleksey");
+		deque.addLast("Aleksey");
 		deque.removeFirst();
 		deque.removeLast();
-		StdOut.println(deque);
+		  for (Object s : deque) {
+	            StdOut.print(s);
+	        }
 		
 	}
 }
