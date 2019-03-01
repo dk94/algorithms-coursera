@@ -1,3 +1,6 @@
+package exercises;
+import StdIn;
+import StdOut;
 
 public class LinkedStackOfStrings {
 	 private Node first = null;

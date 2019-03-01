@@ -1,5 +1,9 @@
+package exercises;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+
+import StdIn;
+import StdOut;
 
 public class FixedCapacityStackOfStrings implements Iterable<String> {
     private String[] a;  // holds the items

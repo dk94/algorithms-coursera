@@ -1,3 +1,4 @@
+package exercises;
 import edu.princeton.cs.algs4.CollisionSystem;
 import edu.princeton.cs.algs4.Particle;
 import edu.princeton.cs.algs4.StdDraw;
