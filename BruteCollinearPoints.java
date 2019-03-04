@@ -1,15 +1,22 @@
 
 public class BruteCollinearPoints {
     private LineSegment[] segments;
+
     public BruteCollinearPoints(Point[] points) {
-        
-    } // finds all line segments containing 4 points
+        for(int i=0; i<points.length; i++) {
+            Point firstPoint = points[i];
+            for(int j=i+1; j<points.length; j++) {
+                Point secondPoint = point[j];
+                for(int k=j+1; k)
+            }
+        }
+    }
 
     public int numberOfSegments() {
-        
-    } // the number of line segments
+        return segments.length;
+    }
 
     public LineSegment[] segments() {
-        
-    } // the line segments
+        return segments;
+    }
 }
