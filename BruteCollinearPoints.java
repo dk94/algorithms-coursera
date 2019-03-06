@@ -11,7 +11,7 @@ public class BruteCollinearPoints {
     	if(points == null) {
     		throw new IllegalArgumentException();
     	}
-        segments = new LineSegment[points.length/4];
+        segments = new LineSegment[points.length];
         for(int i=0; i<points.length; i++) {
             Point firstPoint = points[i];
             if(firstPoint == null) throw new IllegalArgumentException();
@@ -72,7 +72,9 @@ public class BruteCollinearPoints {
         BruteCollinearPoints collinear = new BruteCollinearPoints(points);
         for (LineSegment segment : collinear.segments()) {
               StdOut.println(segment);
-              StdDraw.line(segment.p.x, segment.p.y, segment.q.x, segment.q.y);
+              if(segment != null) {
+                  StdDraw.line(segment.p.x, segment.p.y, segment.q.x, segment.q.y);
+              }
         }
         StdDraw.show();
     }
