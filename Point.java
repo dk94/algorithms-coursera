@@ -96,7 +96,7 @@ public class Point implements Comparable<Point> {
     
     private class slopeOrderComparator implements Comparator<Point> {
         public int compare(Point v, Point w) {
-            if( slopeTo(v) >= slopeTo(w) ) return 1;
+            if( slopeTo(v) > slopeTo(w) ) return 1;
             else return -1;
         }
     }
