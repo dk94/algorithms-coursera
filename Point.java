@@ -50,16 +50,16 @@ public class Point implements Comparable<Point> {
      * @return the slope between this point and the specified point
      */
     public double slopeTo(Point that) {
-        if(x == that.x & y == that.y) {
+        if (x == that.x & y == that.y) {
             return Double.NEGATIVE_INFINITY;
-        } else if(x == that.x) {
+        } else if (x == that.x) {
             return Double.POSITIVE_INFINITY;
-        } else if(y == that.y) {
+        } else if (y == that.y) {
             return 0.0;
         } else {
-            return (double)(that.y - y) / (double)(that.x - x);
+            return (double) (that.y - y) / (double) (that.x - x);
         }
-        
+
     }
 
     /**
@@ -74,12 +74,17 @@ public class Point implements Comparable<Point> {
      *         the argument point
      */
     public int compareTo(Point that) {
-        if(y > that.y) return 1;
-        else if(y < that.y) return -1;
+        if (y > that.y)
+            return 1;
+        else if (y < that.y)
+            return -1;
         else {
-            if(x < that.x) return -1;
-            else if(x > that.x) return 1;
-            else return 0;
+            if (x < that.x)
+                return -1;
+            else if (x > that.x)
+                return 1;
+            else
+                return 0;
         }
     }
 
@@ -93,11 +98,15 @@ public class Point implements Comparable<Point> {
         /* YOUR CODE HERE */
         return new slopeOrderComparator();
     }
-    
+
     private class slopeOrderComparator implements Comparator<Point> {
         public int compare(Point v, Point w) {
-            if( slopeTo(v) > slopeTo(w) ) return 1;
-            else return -1;
+            if (slopeTo(v) > slopeTo(w))
+                return 1;
+            else if (slopeTo(v) == slopeTo(w))
+                return 0;
+            else
+                return -1;
         }
     }
 
