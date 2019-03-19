@@ -61,7 +61,7 @@ public class Board {
     
     private class neighboursCollection implements Iterable<Board>{
         public neighboursCollection() {
-            
+            for()
         }
         
         private class neigboursIterator implements Iterator<Board> {

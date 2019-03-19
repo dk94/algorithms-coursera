@@ -4,13 +4,16 @@ import java.util.Iterator;
 import edu.princeton.cs.algs4.MinPQ;
 
 public class Solver {
-    private final MinPQ minPQ = new MinPQ();
+    private final MinPQ minPQ = new MinPQ(comparator());
     private int moves;
     Board currentBoard;
     public Solver(Board initial) {
         minPQ.insert(initial);
-        
         Board currentMin = (Board)minPQ.delMin();
+        while(!currentMin.isGoal()) {
+            
+        }
+
         
         
         currentBoard = initial;
