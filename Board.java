@@ -3,23 +3,11 @@ import java.util.Iterator;
 public class Board {
     
     private final int[][] board;
-    private final int[][] finalBoard;
     private final int dimension;
 
     public Board(int[][] blocks) {
         board = blocks;
         dimension = blocks[0].length;
-        finalBoard = new int[dimension][dimension];
-        int counter = 1;
-        for(int i=0; i < dimension; i++) {
-            for(int j=0; j < dimension; j++) {
-                if(j == dimension -1 & i == dimension -1) {
-                    finalBoard[i][j] = 0;
-                }
-                finalBoard[i][j] = counter;
-                counter++;
-            }
-        }
     }
     
     public int dimension() {
@@ -31,7 +19,7 @@ public class Board {
         int currentHam = 0;
         for(int i = 0; i < dimension; i++) {
             for(int j=0; j < dimension; j++) {
-                if(board[i][j] != 0 & board[i][j] != finalBoard[i][j]) {
+                if(board[i][j] != 0 & board[i][j] != i+j+1) {
                     currentHam++;
                 }
             }
@@ -46,7 +34,7 @@ public class Board {
     public boolean isGoal() {
         for(int i=0; i < dimension; i++) {
             for(int j=0; j < dimension; j++) {
-                if(board[i][j] != finalBoard[i][j]) {
+                if(board[i][j] != i+j+1) {
                     return false;
                 }
             }
@@ -61,7 +49,18 @@ public class Board {
     
     private class neighboursCollection implements Iterable<Board>{
         public neighboursCollection() {
-            for()
+            int zeroRowPosition;
+            int zeroColumnPosition;
+
+            for(int i=0; i<dimension; i++) {
+                for(int j=0; j<dimension; j++) {
+                    if(board[i][j] == 0) {
+                        zeroRowPosition = i;
+                        zeroColumnPosition = j;
+                        break;
+                    }
+                }
+            }
         }
         
         private class neigboursIterator implements Iterator<Board> {
