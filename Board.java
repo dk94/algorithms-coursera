@@ -1,5 +1,7 @@
 import java.util.Iterator;
 
+import edu.princeton.cs.algs4.LinkedStack;
+
 public class Board {
     
     private final int[][] board;
@@ -19,7 +21,7 @@ public class Board {
         int currentHam = 0;
         for(int i = 0; i < dimension; i++) {
             for(int j=0; j < dimension; j++) {
-                if(board[i][j] != 0 & board[i][j] != i+j+1) {
+                if(board[i][j] != 0 & board[i][j] != i*dimension+j+1) {
                     currentHam++;
                 }
             }
@@ -28,13 +30,25 @@ public class Board {
     }
     
     public int manhattan() {
-        return 0;
+        int manhattan = 0;
+        for(int i = 0; i < dimension; i++) {
+            for(int j=0; j < dimension; j++) {
+                if(board[i][j] != 0 ) {
+                   int originRow = (board[i][j] - 1) / dimension;
+                   int originColumn = (board[i][j] -1) % dimension;
+                   
+                   manhattan += Math.abs(originRow -i) + Math.abs(originColumn - j);
+                }
+            }
+        }
+        
+        return manhattan;
     }
     
     public boolean isGoal() {
         for(int i=0; i < dimension; i++) {
             for(int j=0; j < dimension; j++) {
-                if(board[i][j] != i+j+1) {
+                if(board[i][j] != i*dimension+j+1 & board[i][j] != 0) {
                     return false;
                 }
             }
@@ -47,10 +61,30 @@ public class Board {
         return new neighboursCollection();
     }
     
+    private int[][] copyArray(){
+        int [][] copy = new int[dimension][dimension];
+        for(int i=0; i<dimension; i++) {
+            for(int j=0; j<dimension; j++) {
+              copy[i][j] = board[i][j];
+            }
+        }
+        
+        return copy;
+    }
+    
+    private void exchange(int [][] arr, int i, int j, int k, int m) {
+        int temp = arr[i][j];
+        arr[i][j] = arr[k][m];
+        arr[k][m] = temp;
+    }
+    
     private class neighboursCollection implements Iterable<Board>{
+        
+        private LinkedStack stack = new LinkedStack();
         public neighboursCollection() {
-            int zeroRowPosition;
-            int zeroColumnPosition;
+            int zeroRowPosition=0;
+            int zeroColumnPosition=0;
+            
 
             for(int i=0; i<dimension; i++) {
                 for(int j=0; j<dimension; j++) {
@@ -61,15 +95,61 @@ public class Board {
                     }
                 }
             }
+            
+            if(zeroRowPosition + 1 < dimension) {
+                int[][] arrayC = copyArray();
+                exchange(arrayC,
+                        zeroRowPosition, 
+                        zeroColumnPosition, 
+                        zeroRowPosition+1, 
+                        zeroColumnPosition);
+
+                Board neigbour = new Board(arrayC);
+                
+                stack.push(neigbour);
+            }
+            
+            if(zeroRowPosition - 1 >= 0) {
+                int[][] arrayC = copyArray();
+                exchange(arrayC,
+                        zeroRowPosition, 
+                        zeroColumnPosition, 
+                        zeroRowPosition-1, 
+                        zeroColumnPosition);
+
+                stack.push(new Board(arrayC));
+            }
+            
+            if(zeroColumnPosition - 1 >= 0) {
+                int[][] arrayC = copyArray();
+                exchange(arrayC,
+                        zeroRowPosition, 
+                        zeroColumnPosition, 
+                        zeroRowPosition, 
+                        zeroColumnPosition-1);
+
+                stack.push(new Board(arrayC));
+            }
+            
+            if(zeroColumnPosition + 1 < dimension) {
+                int[][] arrayC = copyArray();
+                exchange(arrayC,
+                        zeroRowPosition, 
+                        zeroColumnPosition, 
+                        zeroRowPosition, 
+                        zeroColumnPosition+1);
+
+                stack.push(new Board(arrayC));
+            }
         }
         
         private class neigboursIterator implements Iterator<Board> {
             public Board next() {
-                return new Board(new int[0][0]);
+                return (Board)stack.pop();
             }
             
             public boolean hasNext() {
-                return false;
+                return !stack.isEmpty();
             }
             
             
@@ -78,6 +158,25 @@ public class Board {
         public Iterator<Board> iterator(){
             return new neigboursIterator();
         }
+    }
+    
+    public String toString()  {
+        StringBuilder str = new StringBuilder();
+        str.append(dimension);
+        str.append("\n");
+        
+        for(int i=0; i<dimension; i++) {
+            for(int j=0; j<dimension; j++) {
+                str.append(board[i][j]);
+                str.append(" ");
+            }
+            
+            str.append("\n");
+        }
+        
+        return str.toString();
+        
+        
     }
     
     public static void main(String[] args) {
