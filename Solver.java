@@ -2,6 +2,8 @@ import java.util.Comparator;
 import java.util.Iterator;
 
 import edu.princeton.cs.algs4.In;
+import edu.princeton.cs.algs4.LinkedQueue;
+import edu.princeton.cs.algs4.LinkedStack;
 import edu.princeton.cs.algs4.MinPQ;
 import edu.princeton.cs.algs4.StdOut;
 
@@ -9,6 +11,7 @@ public class Solver {
     private final MinPQ minPQ;
     private int moves = 0;
     private Board solution;
+	private LinkedQueue<Board> queue = new LinkedQueue<Board>();
     private class Node {
     	public Node(Board b, int m, Board p) {
     		item = b;
@@ -21,6 +24,7 @@ public class Solver {
     }
     public Solver(Board initial) {
         Board currentMin = initial;
+        queue.enqueue(currentMin);
         minPQ = new MinPQ(comparator());
         Board previous = null;
         while(!currentMin.isGoal()) {
@@ -35,20 +39,15 @@ public class Solver {
            moves = minNode.currentMoves;
            previous = minNode.previous;
            currentMin = minNode.item;
-           
-           StdOut.println(currentMin + "  " + currentMin.manhattan()+ "moves" + minNode.currentMoves);
+           queue.enqueue(currentMin);
         }
-        
-        
-        solution = currentMin;
-        
     }
     public boolean isSolvable() {return false;}            // is the initial board solvable?
     public int moves() {return moves;}                    // min number of moves to solve initial board; -1 if unsolvable
-    public Board solution() {
-        return solution;
+    public Iterable<Board> solution()  {
+    	return queue;
     }
-    
+   
     private Comparator<Node> comparator() {
         return new ManhattanComparator();
     }
@@ -86,7 +85,8 @@ public class Solver {
         
         Solver solver = new Solver(initial);
         StdOut.println("Minimum number of moves = " + solver.moves());
-        StdOut.println(solver.solution());
+        for (Board board : solver.solution())
+            StdOut.println(board);
         
     } // solve a slider puzzle (given below)
 }
