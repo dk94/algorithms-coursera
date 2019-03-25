@@ -6,6 +6,7 @@ public class Board {
     
     private final int[][] board;
     private final int dimension;
+    private int moves;
 
     public Board(int[][] blocks) {
         board = blocks;
@@ -27,6 +28,10 @@ public class Board {
             }
         }
         return currentHam;
+    }
+    
+    private void setMovesForBoard(int moves) {
+    	moves = moves;
     }
     
     public int manhattan() {
@@ -59,6 +64,11 @@ public class Board {
     
     public Iterable<Board> neighbours() {
         return new neighboursCollection();
+    }
+    
+    public boolean equals(Object y) {
+    	Board compBoard = (Board) y;
+    	return this.toString().equals(compBoard.toString());
     }
     
     private int[][] copyArray(){
@@ -144,12 +154,13 @@ public class Board {
         }
         
         private class neigboursIterator implements Iterator<Board> {
+        	Iterator<Board> iterator = stack.iterator();
             public Board next() {
-                return (Board)stack.pop();
+                return (Board)iterator.next();
             }
             
             public boolean hasNext() {
-                return !stack.isEmpty();
+                return iterator.hasNext();
             }
             
             

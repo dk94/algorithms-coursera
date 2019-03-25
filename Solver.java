@@ -1,26 +1,39 @@
 import java.util.Comparator;
 import java.util.Iterator;
 
+import edu.princeton.cs.algs4.In;
 import edu.princeton.cs.algs4.MinPQ;
+import edu.princeton.cs.algs4.StdOut;
 
 public class Solver {
     private final MinPQ minPQ;
     private int moves;
     private Board solution;
+    private class Node {
+    	public Node(Board b, int m) {
+    		item = b;
+    		currentMoves = m;
+    	}
+    	private Board item;
+    	private int currentMoves;
+    }
     public Solver(Board initial) {
         Board currentMin = initial;
         minPQ = new MinPQ(comparator());
+        Board previous = null;
         while(!currentMin.isGoal()) {
             moves++;
-
+            
            for(Board neigbour : currentMin.neighbours()) {
-              
-               minPQ.insert(neigbour);
+              StdOut.println(neigbour + " " + neigbour.manhattan() + "move:" + moves);
+               if(previous == null || !neigbour.equals(previous)) {
+            		   minPQ.insert(new Node(neigbour, moves));   
+               }
            }
            
-           currentMin = (Board)minPQ.delMin();
-           
-           
+           Node minNode = (Node)minPQ.delMin();
+           previous = currentMin;
+           currentMin = minNode.item;
         }
         
         
@@ -33,31 +46,32 @@ public class Solver {
         return solution;
     }
     
-    private Comparator<Board> comparator() {
+    private Comparator<Node> comparator() {
         return new ManhattanComparator();
     }
     
     private class HammingComparator implements Comparator<Board> {
         public int compare(Board o1, Board o2) {
-            if(o1.hamming() > o2.hamming()) return 1;
-            else if(o1.hamming() == o2.hamming()) {
-                return 0;
-            }
-            else return -1;
+          return 0;
         }
         
     }
     
-    private class ManhattanComparator implements Comparator<Board> {
-        public int compare(Board o1, Board o2) {
-            if(o1.manhattan() > o2.manhattan()) return 1;
-            else if(o1.manhattan() == o2.manhattan()) {
-                return 0;
+    private class ManhattanComparator implements Comparator<Node> {
+        public int compare(Node o1, Node o2) {
+            if((o1.item.manhattan() + o1.currentMoves) > (o2.item.manhattan() + o2.currentMoves) ) return 1;
+            else if((o1.item.manhattan() + o1.currentMoves)  == (o2.item.manhattan() + o2.currentMoves) ) {
+            	 if((o1.item.manhattan())  > (o2.item.manhattan())) return 1;
+                 else if((o1.item.manhattan()) < (o2.item.manhattan())) {
+                     return -1;
+                 }
+                 else return 0;
             }
             else return -1;
         }
         
     }
+
  
     // sequence of boards in a shortest solution; null if unsolvable
     public static void main(String[] args) {
