@@ -7,33 +7,36 @@ import edu.princeton.cs.algs4.StdOut;
 
 public class Solver {
     private final MinPQ minPQ;
-    private int moves;
+    private int moves = 0;
     private Board solution;
     private class Node {
-    	public Node(Board b, int m) {
+    	public Node(Board b, int m, Board p) {
     		item = b;
     		currentMoves = m;
+    		previous = p;
     	}
     	private Board item;
     	private int currentMoves;
+    	private Board previous;
     }
     public Solver(Board initial) {
         Board currentMin = initial;
         minPQ = new MinPQ(comparator());
         Board previous = null;
         while(!currentMin.isGoal()) {
-            moves++;
             
            for(Board neigbour : currentMin.neighbours()) {
-              StdOut.println(neigbour + " " + neigbour.manhattan() + "move:" + moves);
                if(previous == null || !neigbour.equals(previous)) {
-            		   minPQ.insert(new Node(neigbour, moves));   
+            		   minPQ.insert(new Node(neigbour, moves + 1, currentMin));   
                }
            }
            
            Node minNode = (Node)minPQ.delMin();
-           previous = currentMin;
+           moves = minNode.currentMoves;
+           previous = minNode.previous;
            currentMin = minNode.item;
+           
+           StdOut.println(currentMin + "  " + currentMin.manhattan()+ "moves" + minNode.currentMoves);
         }
         
         
@@ -61,11 +64,7 @@ public class Solver {
         public int compare(Node o1, Node o2) {
             if((o1.item.manhattan() + o1.currentMoves) > (o2.item.manhattan() + o2.currentMoves) ) return 1;
             else if((o1.item.manhattan() + o1.currentMoves)  == (o2.item.manhattan() + o2.currentMoves) ) {
-            	 if((o1.item.manhattan())  > (o2.item.manhattan())) return 1;
-                 else if((o1.item.manhattan()) < (o2.item.manhattan())) {
-                     return -1;
-                 }
-                 else return 0;
+            	return 0;
             }
             else return -1;
         }
